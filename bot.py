@@ -237,8 +237,10 @@ def send_telegram(token, chat_id, text):
 
 
 def main():
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+    # strip whitespace/newlines — secrets are easy to paste with a trailing
+    # newline, which corrupts the API URL (bot<token>%0A/sendMessage -> 404)
+    token = (os.environ.get("TELEGRAM_BOT_TOKEN") or "").strip()
+    chat_id = (os.environ.get("TELEGRAM_CHAT_ID") or "").strip()
     if not token or not chat_id:
         sys.exit("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set.")
 
